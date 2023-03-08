@@ -10,7 +10,8 @@ public class Fruit {
     private ImageIcon img;
 
     public Fruit(){   //水果座標
-        img = new ImageIcon("strawberry.png");
+        //img = new ImageIcon("strawberry.png");
+        img = new ImageIcon(getClass().getResource("strawberry.png"));
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE); //隨機產生位置
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
     }
