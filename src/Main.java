@@ -17,6 +17,11 @@ public class Main extends JPanel implements KeyListener {
     public static int column = width / CELL_SIZE;  //寬度
     private Snake snake;
     private Fruit fruit;
+    private Bomb bomb;
+    private Grape grape;
+    private BlackBomb blackBomb;
+    private Ghost ghost;
+    private Lemon lemon;
     private Timer t;
     private int speed = 100;   //隔100毫秒
     private static String direction;
@@ -30,6 +35,7 @@ public class Main extends JPanel implements KeyListener {
         reset();
         addKeyListener(this);
     }
+
     private void setTimer(){
         t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
@@ -38,7 +44,10 @@ public class Main extends JPanel implements KeyListener {
                 repaint();  //重新繪製
             }
         }, 0, speed); // speed-->隔幾秒
+
     }
+
+    //重置遊戲(遊戲初始化
     private void reset(){
         score = 0;
         if(snake != null){
@@ -48,6 +57,11 @@ public class Main extends JPanel implements KeyListener {
         direction = "down";
         snake = new Snake();
         fruit = new Fruit();
+        bomb = new Bomb();
+        grape = new Grape();
+        blackBomb = new BlackBomb();
+        ghost = new Ghost();
+        lemon = new Lemon();
         setTimer();
     }
     @Override  //視窗大小
@@ -56,7 +70,14 @@ public class Main extends JPanel implements KeyListener {
         ArrayList<Node> snake_body = snake.getSnakeBody();
         Node head = snake_body.get(0);
         for(int i = 1; i < snake_body.size(); i++){
-            if(snake_body.get(i).x == head.x && snake_body.get(i).y == head.y){
+            if(snake_body.get(i).x == head.x && snake_body.get(i).y == head.y  //當蛇碰到自己的身體
+                    ||snake.getSnakeBody().get(0).x == ghost.getX() && snake.getSnakeBody().get(0).y == ghost.getY() //當蛇碰到鬼
+
+                    //碰到邊界
+                    && head.x >= getWidth()  / width + CELL_SIZE
+                    || head.x <  getWidth()  / width - CELL_SIZE   //左邊
+                    && head.y >= getHeight() / height + CELL_SIZE
+                    || head.y <  getHeight() / height - CELL_SIZE){  //上面
                 allowKeyPress = false;
                 t.cancel();
                 t.purge();
@@ -76,9 +97,23 @@ public class Main extends JPanel implements KeyListener {
                 }
             }
         }
-        g.fillRect(0,0,width,height);    //視窗塗黑
+
+        //改變視窗背景
+        ImageIcon image = new ImageIcon("sky.png");
+        //ImageIcon image = new ImageIcon(getClass().getResource(".idea/sky.png"));
+        super.paintComponent(g);
+        image.paintIcon(this,g,0,0);
+
+        //g.fillRect(0,0,width,height);    //視窗塗黑
         snake.drawSnake(g); //將蛇畫出來
         fruit.drawFruit(g); //將水果畫出來
+        bomb.drawBomb(g);   //將炸彈畫出來
+        blackBomb.drawBlackBomb(g); //將黑色炸彈畫出來
+        grape.drawGrape(g); //將葡萄畫出來
+        ghost.drawGhost(g); //將鬼畫出來
+        lemon.drawLemon(g); //將檸檬畫出來
+
+
         int snakeX = snake.getSnakeBody().get(0).x;  //取頭得位置
         int snakeY = snake.getSnakeBody().get(0).y;
         if(direction.equals("right")){
@@ -90,19 +125,55 @@ public class Main extends JPanel implements KeyListener {
         }else if(direction.equals("down")){
             snakeY += CELL_SIZE;
         }
+
         Node newHead = new Node(snakeX, snakeY);
-        if (snake.getSnakeBody().get(0).x == fruit.getX() && snake.getSnakeBody().get(0).y == fruit.getY()){
+        //當蛇吃到水果
+        if (snake.getSnakeBody().get(0).x == fruit.getX() && snake.getSnakeBody().get(0).y == fruit.getY()) {
             //System.out.println("eat!!");
             fruit.setNewLocation(snake);
             fruit.drawFruit(g);
             score++; //吃到水果加一分
+
+        //當蛇吃到葡萄
+        }else if(snake.getSnakeBody().get(0).x == grape.getX() && snake.getSnakeBody().get(0).y == grape.getY()){
+            grape.setNewLocation(snake);
+            grape.drawGrape(g);
+            score += 2; //吃到葡萄加兩分
+            snake_body.add(snake_body.size()-1,new Node(0,0));
+
+        //當蛇吃到檸檬
+        }else if (snake.getSnakeBody().get(0).x == lemon.getX() && snake.getSnakeBody().get(0).y == lemon.getY()){
+            lemon.setNewLocation(snake);
+            lemon.drawLemon(g);
+            score++; //吃到檸檬加一分
+
         }else {
-            snake.getSnakeBody().remove(snake.getSnakeBody().size()-1); //移除蛇身體最後一個Node
+            //當蛇吃到炸彈
+            if(snake.getSnakeBody().get(0).x == bomb.getX() && snake.getSnakeBody().get(0).y == bomb.getY()){
+                bomb.setNewLocation(snake);
+                bomb.drawBomb(g);
+                score--; //吃到炸彈減一分
+                snake.getSnakeBody().remove(snake.getSnakeBody().size()-1); //移除蛇身體最後一個Node(刪尾巴
+            }
+
+            //當蛇吃到黑色炸彈
+            if (snake.getSnakeBody().get(0).x == blackBomb.getX() && snake.getSnakeBody().get(0).y == blackBomb.getY()){
+                blackBomb.setNewLocation(snake);
+                blackBomb.drawBlackBomb(g);
+                score -= 2; //吃到黑色炸彈減兩分
+                snake.getSnakeBody().remove(snake.getSnakeBody().size()-1); //移除蛇身體最後一個Node(刪尾巴
+                snake.getSnakeBody().remove(snake.getSnakeBody().size()-1); //移除蛇身體最後一個Node(刪尾巴
+
+            }
+
+            snake.getSnakeBody().remove(snake.getSnakeBody().size()-1); //移除蛇身體最後一個Node(刪尾巴
         }
         snake.getSnakeBody().add(0, newHead); //在第一個位置加頭
 
+
         allowKeyPress = true;
         requestFocusInWindow();
+
     }
     @Override
     public Dimension getPreferredSize(){
@@ -128,7 +199,7 @@ public class Main extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         //System.out.println(e.getKeyCode());
         if(allowKeyPress){
-            if (e.getKeyCode() == 37 && !direction.equals(("right"))) {
+            if (e.getKeyCode() == 37 && !direction.equals(("right"))) {   //當不是往(右)的時候，可以往(左)走
                 direction = "left";
             } else if (e.getKeyCode() == 38 && !direction.equals(("down"))) {
                 direction = "up";
@@ -139,7 +210,6 @@ public class Main extends JPanel implements KeyListener {
             }
             allowKeyPress = false;
         }
-
     }
 
     @Override
