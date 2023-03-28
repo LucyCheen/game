@@ -7,8 +7,8 @@ public class Ghost {
     private ImageIcon img;
 
     public Ghost(){
-        img = new ImageIcon("ghost.png");
-        //img = new ImageIcon(getClass().getResource(".idea/ghost.png"));
+        //img = new ImageIcon("ghost.png");
+        img = new ImageIcon(getClass().getResource("ghost.png"));
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE); //隨機產生位置
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
     }

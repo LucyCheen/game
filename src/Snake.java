@@ -10,10 +10,15 @@ public class Snake {
 
     public Snake(){  //蛇的身體
         snakeBody = new ArrayList<>();
-        snakeBody.add(new Node(80,0));
-        snakeBody.add(new Node(60,0));
-        snakeBody.add(new Node(40,0));
-        snakeBody.add(new Node(20,0));
+//        snakeBody.add(new Node(80,0));
+//        snakeBody.add(new Node(60,0));
+//        snakeBody.add(new Node(40,0));
+//        snakeBody.add(new Node(20,0));
+
+        snakeBody.add(new Node(120,80));
+        snakeBody.add(new Node(100,80));
+        snakeBody.add(new Node(80,80));
+        snakeBody.add(new Node(60,80));
     }
 
     public ArrayList<Node> getSnakeBody(){

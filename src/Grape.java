@@ -8,8 +8,8 @@ public class Grape {
     private ImageIcon img;
 
     public Grape(){
-        img = new ImageIcon("grape.png");
-        //img = new ImageIcon(getClass().getResource(".idea/grape.png"));
+        //img = new ImageIcon("grape.png");
+        img = new ImageIcon(getClass().getResource("grape.png"));
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE); //隨機產生位置
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
     }

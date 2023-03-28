@@ -71,6 +71,7 @@ public class Main extends JPanel implements KeyListener {
         Node head = snake_body.get(0);
         for(int i = 1; i < snake_body.size(); i++){
             if(snake_body.get(i).x == head.x && snake_body.get(i).y == head.y  //當蛇碰到自己的身體
+
                     ||snake.getSnakeBody().get(0).x == ghost.getX() && snake.getSnakeBody().get(0).y == ghost.getY() //當蛇碰到鬼
 
                     //碰到邊界
@@ -99,8 +100,8 @@ public class Main extends JPanel implements KeyListener {
         }
 
         //改變視窗背景
-        ImageIcon image = new ImageIcon("sky.png");
-        //ImageIcon image = new ImageIcon(getClass().getResource(".idea/sky.png"));
+        //ImageIcon image = new ImageIcon("sky.png");
+        ImageIcon image = new ImageIcon(getClass().getResource("sky.png"));
         super.paintComponent(g);
         image.paintIcon(this,g,0,0);
 

@@ -7,8 +7,8 @@ public class BlackBomb {private int x;
     private ImageIcon img;
 
     public BlackBomb(){
-        img = new ImageIcon("blackBoom.png");
-        //img = new ImageIcon(getClass().getResource(".idea/blackBoom.png"));
+        //img = new ImageIcon("blackBoom.png");
+        img = new ImageIcon(getClass().getResource("blackBoom.png"));
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE); //隨機產生位置
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
     }

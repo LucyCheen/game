@@ -8,8 +8,8 @@ public class Lemon {
     private ImageIcon img;
 
     public Lemon(){
-        img = new ImageIcon("lemon.png");
-        //img = new ImageIcon(getClass().getResource(".idea/lemon.png"));
+        //img = new ImageIcon("lemon.png");
+        img = new ImageIcon(getClass().getResource("lemon.png"));
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE); //隨機產生位置
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
     }

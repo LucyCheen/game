@@ -8,8 +8,8 @@ public class Bomb {
     private ImageIcon img;
 
     public Bomb(){
-        img = new ImageIcon("boom.png");
-        //img = new ImageIcon(getClass().getResource(".idea/boom.png"));
+        //img = new ImageIcon("boom.png");
+        img = new ImageIcon(getClass().getResource("boom.png"));
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE); //隨機產生位置
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
     }
